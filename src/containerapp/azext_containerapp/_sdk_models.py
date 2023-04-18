@@ -3439,12 +3439,15 @@ class Volume(Model):
     :param storage_name: Name of storage resource. No need to provide for
      EmptyDir.
     :type storage_name: str
+    :param secrets: Secrets to mount on secret volume.
+    :type secrets: list[~commondefinitions.models.VolumeSecret]
     """
 
     _attribute_map = {
         'name': {'key': 'name', 'type': 'str'},
         'storage_type': {'key': 'storageType', 'type': 'str'},
         'storage_name': {'key': 'storageName', 'type': 'str'},
+        'secrets': {'key': 'secrets', 'type': '[VolumeSecret]'},
     }
 
     def __init__(self, **kwargs):
@@ -3452,6 +3455,7 @@ class Volume(Model):
         self.name = kwargs.get('name', None)
         self.storage_type = kwargs.get('storage_type', None)
         self.storage_name = kwargs.get('storage_name', None)
+        self.secrets = kwargs.get('secrets', None)
 
 
 class VolumeMount(Model):
@@ -3473,6 +3477,26 @@ class VolumeMount(Model):
         super(VolumeMount, self).__init__(**kwargs)
         self.volume_name = kwargs.get('volume_name', None)
         self.mount_path = kwargs.get('mount_path', None)
+
+class VolumeSecret(Model):
+    """Secret to mount on secret volume
+
+    :param secret_ref: Name of the Container App secret from which to pull the
+    volume secret value.
+    :type secret_ref: str
+    :param path: Path within the container at which the secret should be mounted.
+    :type path: str
+    """
+
+    _attribute_map = {
+        'secret_ref': {'key': 'secretRef', 'type': 'str'},
+        'path': {'key': 'path', 'type': 'str'},
+    }
+
+    def __init__(self, **kwargs):
+        super(VolumeSecret, self).__init__(**kwargs)
+        self.secret_ref = kwargs.get('secret_ref', None)
+        self.path = kwargs.get('path', None)
 
 
 class CorsPolicy(Model):
